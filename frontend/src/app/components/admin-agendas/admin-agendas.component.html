@@ -1,0 +1,60 @@
+<div class="admin-agendas-container">
+  <h2>All User Agendas</h2>
+  
+  <div class="user-selector">
+    <label for="userSelect">Select User:</label>
+    <select 
+      id="userSelect" 
+      [(ngModel)]="selectedUserId" 
+      (change)="loadAgendasForUser()"
+      class="form-control"
+    >
+      <option [ngValue]="null">-- Select a user --</option>
+      <option *ngFor="let user of users" [ngValue]="user.id">
+        {{ user.name }} ({{ user.email }})
+      </option>
+    </select>
+  </div>
+  
+  <div *ngIf="loading" class="loading">Loading agendas...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && !error && selectedUserId" class="agendas-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Status</th>
+          <th>Meeting</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let agenda of agendas">
+          <td>{{ formatDate(agenda.date) }}</td>
+          <td>{{ agenda.startTime }}</td>
+          <td>{{ agenda.endTime }}</td>
+          <td>
+            <span [class]="'status-badge status-' + agenda.status.toLowerCase()">
+              {{ agenda.status }}
+            </span>
+          </td>
+          <td>{{ agenda.meetingTitle || 'N/A' }}</td>
+          <td class="actions">
+            <button (click)="deleteAgenda(agenda.id)" class="btn-delete">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="!loading && selectedUserId && agendas.length === 0" class="no-data">
+    No agendas found for this user.
+  </div>
+  
+  <div *ngIf="!selectedUserId && !loading" class="no-data">
+    Please select a user to view their agendas.
+  </div>
+</div>

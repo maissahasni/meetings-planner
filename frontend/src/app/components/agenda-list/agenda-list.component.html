@@ -1,0 +1,40 @@
+<div class="agenda-list-container">
+  <h2>Agendas</h2>
+  
+  <div class="user-selector">
+    <label for="userSelect">Select User:</label>
+    <select 
+      id="userSelect" 
+      [(ngModel)]="selectedUserId" 
+      (change)="onUserChange()"
+      class="form-control"
+    >
+      <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+    </select>
+  </div>
+  
+  <div *ngIf="loading" class="loading">Loading agendas...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && !error" class="agendas-grid">
+    <div *ngFor="let agenda of agendas" class="agenda-card">
+      <h3>{{ agenda.userName }}</h3>
+      <div class="agenda-details">
+        <p><strong>Date:</strong> {{ agenda.date }}</p>
+        <p><strong>Time:</strong> {{ agenda.startTime }} - {{ agenda.endTime }}</p>
+        <p><strong>Status:</strong> 
+          <span [class]="'status-' + agenda.status.toLowerCase()">
+            {{ agenda.status }}
+          </span>
+        </p>
+      </div>
+      <div class="actions">
+        <button (click)="deleteAgenda(agenda.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && agendas.length === 0" class="no-data">
+    No agendas found for this user.
+  </div>
+</div>

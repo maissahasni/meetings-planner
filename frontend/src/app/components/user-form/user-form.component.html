@@ -1,0 +1,75 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit User' : 'Create New User' }}</h2>
+  
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <div class="form-group">
+      <label for="name">Name *</label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name"
+        [(ngModel)]="user.name" 
+        required
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email"
+        [(ngModel)]="user.email" 
+        required
+        email
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password {{ isEditMode ? '(leave blank to keep current)' : '*' }}</label>
+      <input 
+        type="password" 
+        id="password" 
+        name="password"
+        [(ngModel)]="user.password" 
+        [required]="!isEditMode"
+        minlength="6"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="role">Role *</label>
+      <select 
+        id="role" 
+        name="role"
+        [(ngModel)]="user.role" 
+        required
+        class="form-control"
+      >
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        [disabled]="!userForm.valid || submitting"
+        class="btn-primary"
+      >
+        {{ submitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update User' : 'Create User') }}
+      </button>
+      <button 
+        type="button" 
+        routerLink="/users"
+        class="btn-secondary"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

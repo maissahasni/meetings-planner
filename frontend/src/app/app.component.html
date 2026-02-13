@@ -1,0 +1,49 @@
+<div class="app-container">
+  <nav class="navbar" *ngIf="authService.isLoggedIn()">
+    <div class="nav-brand">
+      <h1>{{ title }}</h1>
+    </div>
+    <ul class="nav-menu">
+      <!-- Admin only menu items -->
+      <ng-container *ngIf="(authService.currentUser$ | async)?.role === 'ADMIN'">
+        <li>
+          <a routerLink="/users" routerLinkActive="active">Users</a>
+        </li>
+        <li>
+          <a routerLink="/users/new" routerLinkActive="active">New User</a>
+        </li>
+        <li>
+          <a routerLink="/admin/meetings" routerLinkActive="active">All Meetings</a>
+        </li>
+        <li>
+          <a routerLink="/admin/agendas" routerLinkActive="active">All Agendas</a>
+        </li>
+      </ng-container>
+      
+      <!-- User menu items -->
+      <ng-container *ngIf="(authService.currentUser$ | async)?.role === 'USER'">
+        <li>
+          <a routerLink="/my-meetings" routerLinkActive="active">My Meetings</a>
+        </li>
+        <li>
+          <a routerLink="/meetings" routerLinkActive="active">All Meetings</a>
+        </li>
+        <li>
+          <a routerLink="/meetings/new" routerLinkActive="active">New Meeting</a>
+        </li>
+        <li>
+          <a routerLink="/my-agendas" routerLinkActive="active">My Agenda</a>
+        </li>
+      </ng-container>
+    </ul>
+    <div class="nav-user">
+      <span class="user-role">{{ (authService.currentUser$ | async)?.role }}</span>
+      <span class="user-name">{{ (authService.currentUser$ | async)?.name }}</span>
+      <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+  
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

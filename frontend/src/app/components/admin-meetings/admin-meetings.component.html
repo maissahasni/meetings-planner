@@ -1,0 +1,41 @@
+<div class="admin-meetings-container">
+  <div class="header">
+    <h2>All Meetings</h2>
+    <button routerLink="/admin/meetings/new" class="btn-primary">Create Meeting</button>
+  </div>
+  
+  <div *ngIf="loading" class="loading">Loading meetings...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && !error" class="meetings-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Organizer</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Participants</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let meeting of meetings">
+          <td>{{ meeting.title }}</td>
+          <td>{{ meeting.organizer.name }}</td>
+          <td>{{ formatDateTime(meeting.startTime) }}</td>
+          <td>{{ formatDateTime(meeting.endTime) }}</td>
+          <td>{{ getParticipantNames(meeting) }}</td>
+          <td class="actions">
+            <button [routerLink]="['/admin/meetings/edit', meeting.id]" class="btn-edit">Edit</button>
+            <button (click)="deleteMeeting(meeting.id)" class="btn-delete">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="!loading && meetings.length === 0" class="no-data">
+    No meetings found.
+  </div>
+</div>

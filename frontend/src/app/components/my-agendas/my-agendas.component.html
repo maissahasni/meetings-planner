@@ -1,0 +1,28 @@
+<div class="agenda-list-container">
+  <h2>My Agenda</h2>
+  
+  <div *ngIf="loading" class="loading">Loading agenda...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && !error" class="agendas-grid">
+    <div *ngFor="let agenda of agendas" class="agenda-card">
+      <div class="agenda-header">
+        <h3>{{ agenda.date }}</h3>
+        <span [class]="'status-badge status-' + agenda.status.toLowerCase()">
+          {{ agenda.status }}
+        </span>
+      </div>
+      <div class="agenda-details">
+        <p><strong>Time:</strong> {{ agenda.startTime }} - {{ agenda.endTime }}</p>
+        <p *ngIf="agenda.meetingTitle"><strong>Meeting:</strong> {{ agenda.meetingTitle }}</p>
+      </div>
+      <div class="actions">
+        <button (click)="deleteAgenda(agenda.id)" class="btn-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!loading && agendas.length === 0" class="no-data">
+    No agenda items found. Schedule a meeting to see your agenda!
+  </div>
+</div>

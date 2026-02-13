@@ -1,0 +1,106 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit Meeting' : 'Create New Meeting' }}</h2>
+  
+  <div *ngIf="error" class="error">{{ error }}</div>
+  
+  <form (ngSubmit)="onSubmit()" #meetingForm="ngForm">
+    <div class="form-group">
+      <label for="title">Title *</label>
+      <input 
+        type="text" 
+        id="title" 
+        name="title"
+        [(ngModel)]="meeting.title" 
+        required
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea 
+        id="description" 
+        name="description"
+        [(ngModel)]="meeting.description" 
+        rows="3"
+        class="form-control"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="startTime">Start Time *</label>
+        <input 
+          type="datetime-local" 
+          id="startTime" 
+          name="startTime"
+          [(ngModel)]="meeting.startTime" 
+          required
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="endTime">End Time *</label>
+        <input 
+          type="datetime-local" 
+          id="endTime" 
+          name="endTime"
+          [(ngModel)]="meeting.endTime" 
+          required
+          class="form-control"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="organizer">Organizer *</label>
+      <select 
+        id="organizer" 
+        name="organizer"
+        [(ngModel)]="meeting.organizerId" 
+        required
+        class="form-control"
+      >
+        <option [value]="0">-- Select Organizer --</option>
+        <option *ngFor="let user of users" [value]="user.id">
+          {{ user.name }} ({{ user.email }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Participants</label>
+      <div class="participants-list">
+        <div *ngFor="let user of users" class="participant-item">
+          <input 
+            type="checkbox" 
+            [id]="'participant-' + user.id"
+            [checked]="selectedParticipants[user.id!]"
+            (change)="toggleParticipant(user.id!)"
+          />
+          <label [for]="'participant-' + user.id">
+            {{ user.name }} ({{ user.email }})
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        [disabled]="!meetingForm.valid || submitting"
+        class="btn-primary"
+      >
+        {{ submitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Meeting' : 'Create Meeting') }}
+      </button>
+      <button 
+        type="button" 
+        routerLink="/admin/meetings"
+        class="btn-secondary"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

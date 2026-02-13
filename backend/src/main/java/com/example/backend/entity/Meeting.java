@@ -1,0 +1,45 @@
+package com.example.backend.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Table(name = "meetings")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Meeting {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String title;
+    
+    @Column(length = 1000)
+    private String description;
+    
+    @Column(nullable = false)
+    private LocalDateTime startTime;
+    
+    @Column(nullable = false)
+    private LocalDateTime endTime;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizer_id", nullable = false)
+    private User organizer;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "meeting_participants",
+        joinColumns = @JoinColumn(name = "meeting_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> participants;
+}
